@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ascii">
+		<script src="index.js" type="module"></script>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body onload="draw()" onresize="draw()">
+		<div id="left">
+			<textarea id="textarea" oninput="draw()"></textarea>
+		</div>
+		<div id="right">
+			<canvas id="canvas"></canvas>
+			<textarea readonly id="error" class="hidden"></textarea>
+		</div>
+	</body>
+</html>
