@@ -1,0 +1,11 @@
+Y (\f.\a.\n.eq n 0
+  (rt (degToRad 180))
+  (chain
+    (fd (mul a n))
+    (rt (degToRad 30))
+    (f a (sub n 1))
+    (rt (degToRad 120))
+    (f a (sub n 1))
+    (rt (degToRad 30))
+    (fd (mul a n))))
+1.3 8

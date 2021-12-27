@@ -1,0 +1,7 @@
+Y (\f.\d.\i.\a.\n.eq n 0
+  chain
+  (chain
+    (fd d)
+    (rt a)
+    (f (add d i) i a (sub n 1))))
+0.002 0.001 (degToRad 5) 3000

@@ -1,0 +1,11 @@
+Y (\f.\n.\b.eq n 0
+  (fd b)
+  (chain
+    (f (sub n 1) (div b  3))
+    (rt (degToRad -60))
+    (f (sub n 1) (div b 3))
+    (rt (degToRad 120))
+    (f (sub n 1) (div b 3))
+    (rt (degToRad -60))
+    (f (sub n 1) (div b 3))))
+4 40
