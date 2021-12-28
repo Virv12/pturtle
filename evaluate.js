@@ -1,19 +1,5 @@
 import { parse } from "./parse.js";
 
-const unlazy = function(v) {
-	while (v.err === undefined && v.type === 'lazy') {
-		const a = evaluate(v.ast, v.env);
-		delete v.ast;
-		delete v.env;
-		for (const k in a) {
-			if (a.hasOwnProperty(k)) {
-				v[k] = a[k];
-			}
-		}
-	}
-	return v;
-};
-
 export const evaluate = function(ast, env) {
 	env = env || global_env;
 
@@ -25,7 +11,19 @@ export const evaluate = function(ast, env) {
 		if (!env.hasOwnProperty(ast.val)) {
 			return { err: `'${ast.val}' is not defined`, pos: ast.pos };
 		}
-		return unlazy(env[ast.val]);
+		const v = env[ast.val];
+		if (v.err) return v;
+		if (v.type === 'lazy') {
+			const a = evaluate(v.ast, v.env);
+			delete v.ast;
+			delete v.env;
+			for (const k in a) {
+				if (a.hasOwnProperty(k)) {
+					v[k] = a[k];
+				}
+			}
+		}
+		return v;
 	}
 
 	if (ast.type === 'call') {
