@@ -28,7 +28,7 @@ export const parse = function(str) {
 			return { err: `can't parse token`, pos };
 		}
 
-		const m = /^\w+/.exec(str.substr(idx));
+		const m = /^[-+*/'\w]+/.exec(str.substr(idx));
 		if (m !== null) {
 			idx += m[0].length;
 			spaces();

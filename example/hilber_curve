@@ -2,14 +2,14 @@ Y (\f.\n.\a.\s.eq n 0
   chain
   (chain
     (rt a)
-    (f (sub n 1) (neg a) s)
+    (f (- n 1) (neg a) s)
     (fd s)
     (rt (neg a))
-    (f (sub n 1) a s)
+    (f (- n 1) a s)
     (fd s)
-    (f (sub n 1) a s)
+    (f (- n 1) a s)
     (rt (neg a))
     (fd s)
-    (f (sub n 1) (neg a) s)
+    (f (- n 1) (neg a) s)
     (rt a)))
 6 (degToRad 90) 0.5

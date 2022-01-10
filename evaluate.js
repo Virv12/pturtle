@@ -101,10 +101,10 @@ const make_fn_num = function(name, val) {
 	global_env[name] = { type: 'fn_num', par: [], name, val };
 };
 
-make_fn_num('add', (a, b) => a + b);
-make_fn_num('sub', (a, b) => a - b);
-make_fn_num('mul', (a, b) => a * b);
-make_fn_num('div', (a, b) => a / b);
+make_fn_num('+', (a, b) => a + b);
+make_fn_num('-', (a, b) => a - b);
+make_fn_num('*', (a, b) => a * b);
+make_fn_num('/', (a, b) => a / b);
 make_fn_num('neg', a => -a);
 make_fn_num('degToRad', a => a * Math.PI / 180);
 make_fn_num('eq', (a, b) => a === b ? True : False);

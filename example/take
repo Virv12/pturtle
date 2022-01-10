@@ -1,0 +1,1 @@
+Y (\f.\n.\l.eq 0 n nil (l nil (\h.\t.cons h (f (- n 1) t))))

@@ -3,5 +3,5 @@ Y (\f.\d.\a.\i.\n.eq n 0
   (chain
     (fd d)
     (rt a)
-    (f (add d i) a i (sub n 1))))
+    (f (+ d i) a i (- n 1))))
 0.3 (degToRad 89.5) 0.2 364
