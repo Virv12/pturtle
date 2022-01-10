@@ -1,1 +1,2 @@
-Y (\fold.\f.\e.\l.l e (\h.\t.fold f (f e h) t))
+fold := Y (\fold.\f.\e.\l.l e (\h.\t.fold f (f e h) t));
+fold

@@ -1,0 +1,2 @@
+a := chain (fd 10) (rt 1.57);
+chain a a a a

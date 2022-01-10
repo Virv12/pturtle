@@ -22,14 +22,20 @@ export const display_ast = function(ast, env, p) {
 		}
 	}
 
-	if (ast.type === 'call') {
-		const s = `${display_ast(ast.a, env, 1)} ${display_ast(ast.b, env, 2)}`;
-		return p > 1 ? `(${s})` : s;
+	if (ast.type === 'bind') {
+		const val = { type: 'lazy', ast: ast.expr, env };
+		const env2 = { ...env, [ast.id]: val };
+		return display_ast(ast.ast, env2, p);
 	}
 
 	if (ast.type === 'fn') {
 		const s = `\\${ast.par}.${display_ast(ast.val, remove(env, ast.par), 0)}`;
 		return p > 0 ? `(${s})` : s;
+	}
+
+	if (ast.type === 'call') {
+		const s = `${display_ast(ast.a, env, 1)} ${display_ast(ast.b, env, 2)}`;
+		return p > 1 ? `(${s})` : s;
 	}
 };
 

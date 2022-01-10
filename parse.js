@@ -59,7 +59,7 @@ export const parse = function(str) {
 		const pos = { line, idx, start };
 		let v = parse_atom();
 		if (v.err) return v;
-		while (idx < str.length && str[idx] !== ')') {
+		while (idx < str.length && str[idx] !== ')' && str[idx] !== ';') {
 			const u = parse_atom();
 			if (u.err) return u;
 			v = { pos, type: 'call', a: v, b : u };
@@ -83,7 +83,24 @@ export const parse = function(str) {
 			if (val.err) return val;
 			return { pos, type: 'fn', par: par.val, val };
 		} else {
-			return parse_call();
+			const pos = { idx, line, start };
+			const id = parse_token();
+			if (id.err || id.type !== 'id' || str.substr(idx, 2) !== ':=') {
+				idx = pos.idx;
+				line = pos.line;
+				start = pos.start;
+				return parse_call();
+			}
+			idx += 2;
+			spaces();
+			const expr = parse_expr();
+			if (expr.err) return expr;
+			if (str[idx] !== ';') return { err: `expected ';'`, pos: { line, idx, start } };
+			idx += 1;
+			spaces();
+			const ast = parse_expr();
+			if (ast.err) return ast;
+			return { pos, type: 'bind', id: id.val, expr, ast };
 		}
 	};
 

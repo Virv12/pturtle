@@ -1,11 +1,13 @@
-Y (\f.\a.\n.eq n 0
+Y (\f.\a.\n.
+  rec := f a (- n 1);
+  eq n 0
   (rt (degToRad 180))
   (chain
     (fd (* a n))
     (rt (degToRad 30))
-    (f a (- n 1))
+    rec
     (rt (degToRad 120))
-    (f a (- n 1))
+    rec
     (rt (degToRad 30))
     (fd (* a n))))
 1.3 8

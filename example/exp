@@ -1,0 +1,6 @@
+fold := Y (\fold.\f.\e.\l.l e (\h.\t.fold f (f e h) t));
+take := Y (\f.\n.\l.eq 0 n nil (l nil (\h.\t.cons h (f (- n 1) t))));
+exp := \x.
+  s := Y (\f.\e.\k.\x.k' := + k 1; cons e (f (/ (* e x) k') k' x)) 1 0 x;
+  fold + 0 (take 10 s);
+exp

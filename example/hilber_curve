@@ -1,15 +1,18 @@
-Y (\f.\n.\a.\s.eq n 0
+Y (\f.\n.\a.\s.
+  rec  := f (- n 1) (neg a) s;
+  rec' := f (- n 1) a s;
+  eq n 0
   chain
   (chain
     (rt a)
-    (f (- n 1) (neg a) s)
+    rec
     (fd s)
     (rt (neg a))
-    (f (- n 1) a s)
+    rec'
     (fd s)
-    (f (- n 1) a s)
+    rec'
     (rt (neg a))
     (fd s)
-    (f (- n 1) (neg a) s)
+    rec
     (rt a)))
 6 (degToRad 90) 0.5

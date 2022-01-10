@@ -26,6 +26,16 @@ export const evaluate = function(ast, env) {
 		return v;
 	}
 
+	if (ast.type === 'bind') {
+		const val = { type: 'lazy', ast: ast.expr, env };
+		const env2 = { ...env, [ast.id]: val };
+		return evaluate(ast.ast, env2);
+	}
+
+	if (ast.type === 'fn') {
+		return { type: 'fn', par: ast.par, val: ast.val, env };
+	}
+
 	if (ast.type === 'call') {
 		let f = evaluate(ast.a, env);
 		if (f.err) return f;
@@ -68,10 +78,6 @@ export const evaluate = function(ast, env) {
 			return { err: `cannot call a number`, pos: ast.a.pos, end: ast.b.pos };
 		}
 		console.error('unknown function type', f);
-	}
-
-	if (ast.type === 'fn') {
-		return { type: 'fn', par: ast.par, val: ast.val, env };
 	}
 };
 

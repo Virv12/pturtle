@@ -1,11 +1,13 @@
-Y (\f.\n.\b.eq n 0
+Y (\f.\n.\b.
+  rec := f (- n 1) (/ b 3);
+  eq n 0
   (fd b)
   (chain
-    (f (- n 1) (/ b 3))
+    rec
     (rt (degToRad -60))
-    (f (- n 1) (/ b 3))
+    rec
     (rt (degToRad 120))
-    (f (- n 1) (/ b 3))
+    rec
     (rt (degToRad -60))
-    (f (- n 1) (/ b 3))))
+    rec))
 4 40
