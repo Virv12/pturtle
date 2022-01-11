@@ -88,16 +88,6 @@ const global_env = {
 	'true': True,
 	'false': False,
 
-	'pair': evaluate(parse('\\a.\\b.\\f.f a b'), {}),
-	'first': True,
-	'second': False,
-
-	'nil': evaluate(parse('\\f.\\g.f'), {}),
-	'cons': evaluate(parse('\\x.\\l.\\f.\\g.g x l'), {}),
-
-	'none': evaluate(parse('\\f.\\g.f'), {}),
-	'some': evaluate(parse('\\x.\\f.\\g.g x'), {}),
-
 	'Y': evaluate(parse('\\f.(\\x.x x)(\\x.f(x x))'), {}),
 
 	'chain': { type: 'draw', val: 'chain', par: [] },

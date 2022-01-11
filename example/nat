@@ -1,2 +1,0 @@
-nat := Y (\f.\n.cons n (f (+ n 1))) 0;
-nat

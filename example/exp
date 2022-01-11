@@ -1,3 +1,5 @@
+nil  := \f.\g.f;
+cons := \x.\l.\f.\g.g x l;
 fold := Y (\fold.\f.\e.\l.l e (\h.\t.fold f (f e h) t));
 take := Y (\f.\n.\l.eq 0 n nil (l nil (\h.\t.cons h (f (- n 1) t))));
 exp := \x.

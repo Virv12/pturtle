@@ -1,0 +1,3 @@
+none := \f.\g.f;
+some := \x.\f.\g.g x;
+(some 3) 0 (\x.x)

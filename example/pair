@@ -1,0 +1,4 @@
+pair := \a.\b.\f.f a b;
+fst  := \a.\b.a;
+snd  := \a.\b.b;
+(pair 3 4) fst
