@@ -91,6 +91,8 @@ const global_env = {
 	'Y': evaluate(parse('\\f.(\\x.x x)(\\x.f(x x))'), {}),
 
 	'chain': { type: 'draw', val: 'chain', par: [] },
+	'penup': { type: 'draw', val: 'penup', par: [] },
+	'pendw': { type: 'draw', val: 'pendw', par: [] },
 };
 
 const make_fn_num = function(name, val) {
@@ -101,6 +103,8 @@ make_fn_num('+', (a, b) => a + b);
 make_fn_num('-', (a, b) => a - b);
 make_fn_num('*', (a, b) => a * b);
 make_fn_num('/', (a, b) => a / b);
+make_fn_num('quot', (a, b) => Math.trunc(a / b));
+make_fn_num('rem', (a, b) => a % b);
 make_fn_num('neg', a => -a);
 make_fn_num('degToRad', a => a * Math.PI / 180);
 make_fn_num('eq', (a, b) => a === b ? True : False);

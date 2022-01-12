@@ -62,13 +62,18 @@ window.draw = function() {
 		py: 2 * height / 2,
 		dx: 2 * size / 100,
 		dy: 0,
+		drawing: true,
 
 		ctx,
 
 		forward: arg => {
 			turtle.px += arg * turtle.dx;
 			turtle.py += arg * turtle.dy;
-			turtle.ctx.lineTo(turtle.px, turtle.py);
+			if (turtle.drawing) {
+				turtle.ctx.lineTo(turtle.px, turtle.py);
+			} else {
+				turtle.ctx.moveTo(turtle.px, turtle.py);
+			}
 		},
 		rotate: arg => {
 			const c = Math.cos(arg);
@@ -77,6 +82,12 @@ window.draw = function() {
 			const b = turtle.dy;
 			turtle.dx = a * c - b * s;
 			turtle.dy = b * c + a * s;
+		},
+		draw_on: () => {
+			turtle.drawing = true;
+		},
+		draw_off: () => {
+			turtle.drawing = false;
 		},
 	};
 
