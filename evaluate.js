@@ -1,6 +1,6 @@
 import { parse } from "./parse.js";
 
-export const evaluate = function(ast, env) {
+export const evaluate = function(ast, env, lazy=false) {
 	env = env || global_env;
 
 	if (ast.type === 'num') {
@@ -13,7 +13,7 @@ export const evaluate = function(ast, env) {
 		}
 		const v = env[ast.val];
 		if (v.err) return v;
-		if (v.type === 'lazy') {
+		if (!lazy && v.type === 'lazy') {
 			const a = evaluate(v.ast, v.env);
 			delete v.ast;
 			delete v.env;
@@ -26,21 +26,25 @@ export const evaluate = function(ast, env) {
 		return v;
 	}
 
-	if (ast.type === 'bind') {
-		const val = { type: 'lazy', ast: ast.expr, env };
-		const env2 = { ...env, [ast.id]: val };
-		return evaluate(ast.ast, env2);
-	}
-
 	if (ast.type === 'fn') {
 		return { type: 'fn', par: ast.par, val: ast.val, env };
+	}
+
+	if (lazy) {
+		return { type: 'lazy', ast, env };
+	}
+
+	if (ast.type === 'bind') {
+		const val = evaluate(ast.expr, env, true);
+		const env2 = { ...env, [ast.id]: val };
+		return evaluate(ast.ast, env2);
 	}
 
 	if (ast.type === 'call') {
 		let f = evaluate(ast.a, env);
 		if (f.err) return f;
 		if (f.type === 'fn') {
-			const v = { type: 'lazy', ast: ast.b, env };
+			const v = evaluate(ast.b, env, true);
 			const env2 = { ...f.env, [f.par]: v };
 			return evaluate(f.val, env2);
 		}
