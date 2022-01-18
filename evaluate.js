@@ -110,7 +110,12 @@ make_fn_num('/', (a, b) => a / b);
 make_fn_num('quot', (a, b) => Math.trunc(a / b));
 make_fn_num('rem', (a, b) => a % b);
 make_fn_num('neg', a => -a);
+make_fn_num('cos', a => Math.cos(a));
+make_fn_num('sin', a => Math.sin(a));
 make_fn_num('degToRad', a => a * Math.PI / 180);
 make_fn_num('eq', (a, b) => a === b ? True : False);
-make_fn_num('fd', par => { return { type: 'draw', val: 'fd', par } });
-make_fn_num('rt', par => { return { type: 'draw', val: 'rt', par } });
+make_fn_num('mv', (a, b) => { return { type: 'draw', val: 'mv', par: [a, b] } });
+make_fn_num('tr', (a, b) => { return { type: 'draw', val: 'tr', par: [a, b] } });
+
+global_env['fd'] = evaluate(parse('\\t.mv t 0'), global_env);
+global_env['rt'] = evaluate(parse('\\t.tr (cos t) (sin t)'), global_env);

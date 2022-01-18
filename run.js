@@ -1,10 +1,10 @@
 export const run = function(arg, turtle) {
-	if (arg.val === 'fd') {
-		turtle.forward(arg.par);
+	if (arg.val === 'mv') {
+		turtle.move(arg.par[0], arg.par[1]);
 	}
 
-	if (arg.val === 'rt') {
-		turtle.rotate(arg.par);
+	if (arg.val === 'tr') {
+		turtle.transform(arg.par[0], arg.par[1]);
 	}
 
 	if (arg.val === 'penup') {

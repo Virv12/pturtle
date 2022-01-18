@@ -66,18 +66,16 @@ window.draw = function() {
 
 		ctx,
 
-		forward: arg => {
-			turtle.px += arg * turtle.dx;
-			turtle.py += arg * turtle.dy;
+		move: (x, y) => {
+			turtle.px += x * turtle.dx - y * turtle.dy;
+			turtle.py += x * turtle.dy + y * turtle.dx;
 			if (turtle.drawing) {
 				turtle.ctx.lineTo(turtle.px, turtle.py);
 			} else {
 				turtle.ctx.moveTo(turtle.px, turtle.py);
 			}
 		},
-		rotate: arg => {
-			const c = Math.cos(arg);
-			const s = Math.sin(arg);
+		transform: (c, s) => {
 			const a = turtle.dx;
 			const b = turtle.dy;
 			turtle.dx = a * c - b * s;
