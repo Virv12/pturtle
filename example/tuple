@@ -1,0 +1,14 @@
+nil   := \f.\g.f;
+cons  := \x.\l.\f.\g.g x l;
+foldl := Y (\fold.\f.\e.\l.l e (\h.\t.fold f (f e h) t));
+foldr := Y (\fold.\f.\e.\l.l e (\h.\t.f h (fold f e t)));
+take  := Y (\f.\n.\l.eq 0 n nil (l nil (\h.\t.cons h (f (- n 1) t))));
+map   := Y (\map.\f.\l.l nil (\h.\t.cons (f h) (map f t)));
+
+tuple  := Y (\f.\l.\n.eq 0 n (\f.foldr (\a.\b.b a) f l) (\e.f (cons e l) (- n 1))) nil;
+pair   := tuple 2;
+triple := tuple 3;
+fst    := \a.\b.a;
+snd    := \a.\b.b;
+
+triple 3 4 5 (\a.\b.\c.c)
