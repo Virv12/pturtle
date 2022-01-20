@@ -1,5 +1,17 @@
 import { parse } from "./parse.js";
 
+export const unlazy = function(v) {
+	const a = evaluate(v.ast, v.env);
+	delete v.ast;
+	delete v.env;
+	for (const k in a) {
+		if (a.hasOwnProperty(k)) {
+			v[k] = a[k];
+		}
+	}
+	return v;
+};
+
 export const evaluate = function(ast, env, lazy=false) {
 	env = env || global_env;
 
@@ -14,14 +26,7 @@ export const evaluate = function(ast, env, lazy=false) {
 		const v = env[ast.val];
 		if (v.err) return v;
 		if (!lazy && v.type === 'lazy') {
-			const a = evaluate(v.ast, v.env);
-			delete v.ast;
-			delete v.env;
-			for (const k in a) {
-				if (a.hasOwnProperty(k)) {
-					v[k] = a[k];
-				}
-			}
+			unlazy(v);
 		}
 		return v;
 	}
@@ -37,7 +42,7 @@ export const evaluate = function(ast, env, lazy=false) {
 	if (ast.type === 'bind') {
 		const val = evaluate(ast.expr, env, true);
 		const env2 = { ...env, [ast.id]: val };
-		return evaluate(ast.ast, env2);
+		return evaluate(ast.ast, env2, lazy);
 	}
 
 	if (ast.type === 'call') {
@@ -46,7 +51,7 @@ export const evaluate = function(ast, env, lazy=false) {
 		if (f.type === 'fn') {
 			const v = evaluate(ast.b, env, true);
 			const env2 = { ...f.env, [f.par]: v };
-			return evaluate(f.val, env2);
+			return evaluate(f.val, env2, lazy);
 		}
 		if (f.type === 'fn_num') {
 			const v = evaluate(ast.b, env);
@@ -71,9 +76,9 @@ export const evaluate = function(ast, env, lazy=false) {
 				return { err: `cannot call a drawing object`, pos: ast.a.pos, end: ast.b.pos };
 			}
 
-			const v = evaluate(ast.b, env);
+			const v = evaluate(ast.b, env, true);
 			if (v.err) return v;
-			if (v.type !== 'draw') {
+			if (v.type !== 'lazy' && v.type !== 'draw') {
 				return { err: `parameter must be a drawble`, pos: ast.b.pos };
 			}
 			return { type: 'draw', val: 'chain', par: f.par.concat([v]) };
@@ -116,6 +121,8 @@ make_fn_num('degToRad', a => a * Math.PI / 180);
 make_fn_num('eq', (a, b) => a === b ? True : False);
 make_fn_num('mv', (a, b) => { return { type: 'draw', val: 'mv', par: [a, b] } });
 make_fn_num('tr', (a, b) => { return { type: 'draw', val: 'tr', par: [a, b] } });
+make_fn_num('sleep', ms => { return { type: 'draw', val: 'sleep', par: [ms] } });
+make_fn_num('nf', ms => { return { type: 'draw', val: 'nf', par: [ms] } });
 
 global_env['fd'] = evaluate(parse('\\t.mv t 0'), global_env);
 global_env['rt'] = evaluate(parse('\\t.tr (cos t) (sin t)'), global_env);

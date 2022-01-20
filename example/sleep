@@ -1,0 +1,17 @@
+nil   := \f.\g.f;
+cons  := \x.\l.\f.\g.g x l;
+foldl := Y (\fold.\f.\e.\l.l e (\h.\t.fold f (f e h) t));
+foldr := Y (\fold.\f.\e.\l.l e (\h.\t.f h (fold f e t)));
+scanl := Y (\scan.\f.\e.\l.cons e (l nil (\h.\t.scan f (f e h) t)));
+take  := Y (\f.\n.\l.eq 0 n nil (l nil (\h.\t.cons h (f (- n 1) t))));
+map   := Y (\map.\f.\l.l nil (\h.\t.cons (f h) (map f t)));
+nat   := Y (\f.\n.cons n (f (+ n 1))) 0;
+
+spiral := map (\x.chain (fd 20) (rt 1)) nat;
+frames := scanl chain chain spiral;
+
+v0 := foldr (\x.\a.chain x (nf 100) a) chain frames;
+
+v1 := foldr (\x.\a.chain x (sleep 100) a) chain spiral;
+
+v1

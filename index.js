@@ -8,10 +8,70 @@ const canvas = document.getElementById("canvas");
 const error = document.getElementById("error");
 const ctx = canvas.getContext('2d');
 
+const turtle = {
+	px: 0,
+	py: 0,
+	dx: 0,
+	dy: 0,
+
+	drawing: true,
+	gen: 0,
+
+	ctx,
+
+	reset: () => {
+		const { width, height } = canvas.getBoundingClientRect();
+		const size = Math.min(width, height);
+		canvas.width = 2 * width;
+		canvas.height = 2 * height;
+
+		ctx.resetTransform();
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		turtle.px = width;
+		turtle.py = height;
+		turtle.dx = 2 * size / 100;
+		turtle.dy = 0;
+		turtle.drawing = true;
+	},
+	begin: () => {
+		ctx.beginPath();
+		ctx.moveTo(turtle.px, turtle.py);
+	},
+	stroke: () => {
+		ctx.stroke();
+	},
+
+	move: (x, y) => {
+		turtle.px += x * turtle.dx - y * turtle.dy;
+		turtle.py += x * turtle.dy + y * turtle.dx;
+		if (turtle.drawing) {
+			ctx.lineTo(turtle.px, turtle.py);
+		} else {
+			ctx.moveTo(turtle.px, turtle.py);
+		}
+	},
+	transform: (c, s) => {
+		const a = turtle.dx;
+		const b = turtle.dy;
+		turtle.dx = a * c - b * s;
+		turtle.dy = b * c + a * s;
+	},
+	draw_on: () => {
+		turtle.drawing = true;
+	},
+	draw_off: () => {
+		turtle.drawing = false;
+	},
+};
+
 window.draw = function() {
+	turtle.gen += 1;
+
 	const code = textarea.value;
 
 	const show_error = function(x) {
+		canvas.classList.add('hidden');
 		error.classList.remove('hidden');
 		if (x.pos === undefined) {
 			error.value = x.err;
@@ -48,49 +108,5 @@ window.draw = function() {
 	}
 
 	canvas.classList.remove('hidden');
-
-	const { width, height } = canvas.getBoundingClientRect();
-	const size = Math.min(width, height);
-	canvas.width = 2 * width;
-	canvas.height = 2 * height;
-
-	ctx.resetTransform();
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-	const turtle = {
-		px: 2 * width / 2,
-		py: 2 * height / 2,
-		dx: 2 * size / 100,
-		dy: 0,
-		drawing: true,
-
-		ctx,
-
-		move: (x, y) => {
-			turtle.px += x * turtle.dx - y * turtle.dy;
-			turtle.py += x * turtle.dy + y * turtle.dx;
-			if (turtle.drawing) {
-				turtle.ctx.lineTo(turtle.px, turtle.py);
-			} else {
-				turtle.ctx.moveTo(turtle.px, turtle.py);
-			}
-		},
-		transform: (c, s) => {
-			const a = turtle.dx;
-			const b = turtle.dy;
-			turtle.dx = a * c - b * s;
-			turtle.dy = b * c + a * s;
-		},
-		draw_on: () => {
-			turtle.drawing = true;
-		},
-		draw_off: () => {
-			turtle.drawing = false;
-		},
-	};
-
-	ctx.beginPath();
-	ctx.moveTo(turtle.px, turtle.py);
-	run(p, turtle);
-	ctx.stroke();
+	run(p, turtle, show_error);
 };

@@ -60,7 +60,7 @@ export const display = function(arg, p) {
 	}
 
 	if (arg.type === 'draw') {
-		const s = `${arg.val} ${arg.par}`;
-		return p > 0 ? `(${s})` : s;
+		const s = `${arg.val}`;
+		return p > 2 ? `(${s})` : s;
 	}
 };
