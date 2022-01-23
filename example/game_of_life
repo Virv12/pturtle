@@ -1,0 +1,58 @@
+nil   := \f.\g.f;
+cons  := \x.\l.\f.\g.g x l;
+foldl := Y (\fold.\f.\e.\l.l e (\h.\t.fold f (f e h) t));
+foldr := Y (\fold.\f.\e.\l.l e (\h.\t.f h (fold f e t)));
+scanl := Y (\scan.\f.\e.\l.cons e (l nil (\h.\t.scan f (f e h) t)));
+take  := Y (\f.\n.\l.eq 0 n nil (l nil (\h.\t.cons h (f (- n 1) t))));
+map   := Y (\map.\f.\l.l nil (\h.\t.cons (f h) (map f t)));
+nat   := Y (\f.\n.cons n (f (+ n 1))) 0;
+
+pair   := \a.\b.\f.f a b;
+fst    := \a.\b.a;
+snd    := \a.\b.b;
+
+node  := \l.\x.\r.\f.f l x r;
+empty := Y (\e.node e false e);
+at    := Y (\at.\t.\n.
+  even := eq 0 (rem n 2);
+  t (\l.\x.\r.eq 1 n x (at (even l r) (quot n 2))));
+set   := Y (\set.\n.\v.\t.
+  even := eq 0 (rem n 2);
+  rec  := set (quot n 2) v;
+  t (\l.\x.\r.eq 1 n (node l v r)
+    (even (node (rec l) x r) (node l x (rec r)))));
+
+N := 8;
+2N := + N N;
+N2 := * N N;
+
+next_state :=
+  decide := \x.\c.x (eq 2 c true (eq 3 c)) (eq 3 c);
+  neighbours :=
+    l := cons 1 (cons (- N2 1) (cons N (cons (- N2 N) (cons (+ 1 N) (cons (- N 1) (cons (- (- N2 N) 1) (cons (+ (- N2 N) 1) nil)))))));
+    \a.map (\b.rem (+ a b) N2) l;
+  \s.
+  f := \t.\x.
+    c := foldl (\a.\y.+ (at s (+ 1 y) 1 0) a) 0 (neighbours x);
+    set (+ 1 x) (decide (at s (+ 1 x)) c) t;
+  foldl f empty (take N2 nat);
+
+draw_state :=
+  cross := chain pendw (mv 0.7  0.7) penup (mv -0.7 0)
+                 pendw (mv 0.7 -0.7) penup (mv -0.7 0);
+  \s.
+  f := \n.\a.
+    x := rem n N;
+    y := quot n N;
+    at s (+ n 1) (chain (mv x y) cross (mv (neg x) (neg y))) chain a;
+  foldr f chain (take N2 nat);
+
+initial_state := set 2 true (set (+ N 3) true (set (+ 2N 1) true (set (+ 2N 2) true (set (+ 2N 3) true empty))));
+
+view := chain
+  penup
+  (tr 12 0)
+  (mv -3.85 -3.85);
+
+foldr (\x.\a.chain view (draw_state x) (nf 100) a) chain
+  (scanl (\s.\x.next_state s) initial_state nat)
